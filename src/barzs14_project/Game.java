@@ -19,7 +19,7 @@ public class Game {
 			{null, null, null, null, null, null, null, null},
 			{null, null, null, null, null, null, null, null},
 			{null, null, null, null, null, null, null, null},
-			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), /*new Pawn(true,"White_Pawn_5")*/ null, new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
+			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
 			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), new King(true,"White_King"), new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
 		};
 		whichPlayer = true;
@@ -82,6 +82,11 @@ public class Game {
 	private void readRowCol(){
 		row = sc.nextInt();
 		col = sc.nextInt();
+		if(row == 100 && col == 100){
+			System.out.println("Game Over!");
+			closeStream();
+			System.exit(0);
+		}
 		while(row > 7 || row < 0){
 			row = sc.nextInt();
 		}
@@ -107,6 +112,9 @@ public class Game {
 	}
 	
 	public void step(){
+		if(choosen.getName().equals("END")){
+			return;
+		}
 		System.out.println("Where would you like to step?");
 		boolean correct = false;
 		
@@ -126,7 +134,7 @@ public class Game {
 		whichPlayer = !whichPlayer;
 	}
 
-	public boolean isWhichPlayer() {
+	public boolean isPlayer() {
 		return whichPlayer;
 	}
 
@@ -134,7 +142,7 @@ public class Game {
 		return choosen;
 	}
 	
-	public void closeStream(){
+	private void closeStream(){
 		sc.close();
 	}
 	

@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 		Game b = new Game();
 		while(true){
-			if (b.isWhichPlayer()){
+			if (b.isPlayer()){
 				System.out.println("White Player turn!");
 			}
 			else{
@@ -13,7 +13,7 @@ public class Main {
 			}
 			System.out.println(b);
 			b.choose();
-			System.out.println("The choosen pupet is " + b.getChoosen().getName());
+			System.out.println("The choosen figure is " + b.getChoosen().getName());
 			b.step();
 		}
 	}
