@@ -8,7 +8,7 @@ public final class Knight extends Figure {
 	}
 
 	@Override
-	public boolean step(int row, int col, Figure n) {
+	public boolean step(int row, int col, Figure[][] f) {
 		// TODO Auto-generated method stub
 		return true;
 	}

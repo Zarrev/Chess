@@ -29,7 +29,7 @@ public abstract class Figure {
 		this.y = y;
 	}
 
-	public abstract boolean step(int row, int col, Figure n);
+	public abstract boolean step(int row, int col, Figure[][] f);
 
 	public boolean isColor() {
 		return color;

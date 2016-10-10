@@ -18,7 +18,7 @@ public class Board {
 			{null, null, null, null, null, null, null, null},
 			{null, null, null, null, null, null, null, null},
 			{null, null, null, null, null, null, null, null},
-			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
+			{new Pawn(true,"White_Pawn_1"), /*new Pawn(true,"White_Pawn_2")*/ null, new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
 			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), new King(true,"White_King"), new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
 		};
 		whichPlayer = true;
@@ -115,7 +115,7 @@ public class Board {
 			while(col > 7 || col < 0){
 				col = sc.nextInt();
 			}
-			if ((table[row][col] == null || whichPlayer != table[row][col].isColor()) && choosen.step(row, col, table[row][col])){
+			if ((table[row][col] == null || whichPlayer != table[row][col].isColor()) && choosen.step(row, col, table)){
 				correct = true;
 				table[row][col] = choosen;
 				table[choosen.getX()][choosen.getY()] = null;

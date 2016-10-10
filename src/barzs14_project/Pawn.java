@@ -7,25 +7,25 @@ public final class Pawn extends Figure {
 	}	
 	
 	@Override
-	public boolean step(int row, int col, Figure f) {
+	public boolean step(int row, int col, Figure[][] f) {
 		if(color)
 	    {
-			if(x-row == 1 && f == null && y == col) {
+			if(x-row == 1 && f[row][col] == null && y == col) {
 				return true;
 			}
-			else if (f != null){
-				if (x-row == 1 && f.isColor() != color && (y-col == 1 || y-col == - 1)){
+			else if (f[row][col] != null){
+				if (x-row == 1 && f[row][col].isColor() != color && (y-col == 1 || y-col == - 1)){
 					return true;
 				}
 			}
 	    }
 	    else
 	    {
-	    	if (x-row == - 1 &&  f == null && y == col) {
+	    	if (x-row == - 1 &&  f[row][col] == null && y == col) {
 	    		return true;
 	    	}
-	    	else if (f != null){
-	    		if (x-row == - 1 &&  f.isColor() != color && (y-col == 1 || y-col == - 1)){
+	    	else if (f[row][col] != null){
+	    		if (x-row == - 1 &&  f[row][col].isColor() != color && (y-col == 1 || y-col == - 1)){
 	    			return true;
 	    		}
 	    	}
