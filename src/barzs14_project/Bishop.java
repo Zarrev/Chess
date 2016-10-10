@@ -8,66 +8,48 @@ public final class Bishop extends Figure {
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
-		/*if(((col-y) == (row-x) )|| ((col-y) == (x-row)) ){
-		    if(y > col){
-		        if(x>row){
-		            int j=1;
-		            for(int i= col+1; i < y; i++) {
-		            	if(f[i][row+j] != null && i != col) {
-		            		return false;
-		            		} 
-		            	j++;
-		            	}
-		        }
-		        else{
-		            int j=-1;
-		            for(int i= col+1; i < y; i++){
-		            	if(f[i][row+j] != null && i != col) {
-		            		return false;
-		            		} 
-		            	j--;
-		            	}
-		        }
-		    }
-		    else{
-		        if(x>row){
-		            int j=-1;
-		            for(int i= y+1; i < col; i++){
-		            	if(f[i][x+j] != null && i != row) {
-		            		return false;
-		            		} 
-		            	j--;
-		            	}
-		        }
-		        else{
-		            int j=1;
-		            for(int i= y+1; i < col; i++){
-		            	if(f[i][x+j] != null && i != row) {
-		            		return false;
-		            	}
-		            	j++;
-		            	}
-		        }
-		    }
-		    return true;
-	    }
-	    else return false;*/
 		if ((x-row == y-col) || (row-x == col-y)){
 			if (y < col){
 				if(x < row){
-					
+					int i = x+1;
+					for(int j = y+1; j <= col && i <= row; j++){
+						if(f[i][j] != null && j != col && i != row){
+							return false;
+						}
+						i++;
+					}
 				}
 				else if (x > row){
-					
+					int i = x-1;
+					for (int j = y+1; j <= col && i >= row; j++){
+						if(f[i][j] != null && j != col && i != row){
+							return false;
+						}
+						i--;
+					}
 				}
+				return true;
 			}
 			else if (y > col){
 				if (x < row){
-					
+					int i = x+1;
+					for(int j = y-1; j >= col && i <= row; j--){
+						if(f[i][j] != null && j != col && i != row){
+							return false;
+						}
+						i++;
+					}
 				}
 				else if (x > row){
-					
+					int i = x-1;
+					for(int j = y-1; j >= col && i >= row; j--){
+						if(f[i][j] != null && j != col && i != row){
+							return false;
+						}
+						i--;
+					}
 				}
+				return true;
 			}
 		}
 		return false;

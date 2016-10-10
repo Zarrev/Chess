@@ -2,15 +2,22 @@ package barzs14_project;
 
 public final class Queen extends Figure {
 
+	private final Bishop B;
+	private final Rook R;
+	
 	public Queen(boolean color, String name) {
 		super(color, name);
-		// TODO Auto-generated constructor stub
+		B = new Bishop(color,name + "_Bishop");
+		R = new Rook(color,name + "_Rook");
 	}
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
-		// TODO Auto-generated method stub
-		return true;
+		B.setX(this.getX());
+		B.setY(this.getY());
+		R.setX(this.getX());
+		R.setY(this.getY());
+		return B.step(row, col, f) || R.step(row, col, f);
 	}
 
 
