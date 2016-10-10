@@ -8,20 +8,20 @@ public final class Bishop extends Figure {
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
-		if ((x-row == y-col) || (row-x == col-y)){
-			if (y < col){
-				if(x < row){
-					int i = x+1;
-					for(int j = y+1; j <= col && i <= row; j++){
+		if ((this.getX()-row == this.getY()-col) || (row-this.getX() == col-this.getY())){
+			if (this.getY() < col){
+				if(this.getX() < row){
+					int i = this.getX()+1;
+					for(int j = this.getY()+1; j <= col && i <= row; j++){
 						if(f[i][j] != null && j != col && i != row){
 							return false;
 						}
 						i++;
 					}
 				}
-				else if (x > row){
-					int i = x-1;
-					for (int j = y+1; j <= col && i >= row; j++){
+				else if (this.getX() > row){
+					int i = this.getX()-1;
+					for (int j = this.getY()+1; j <= col && i >= row; j++){
 						if(f[i][j] != null && j != col && i != row){
 							return false;
 						}
@@ -30,19 +30,19 @@ public final class Bishop extends Figure {
 				}
 				return true;
 			}
-			else if (y > col){
-				if (x < row){
-					int i = x+1;
-					for(int j = y-1; j >= col && i <= row; j--){
+			else if (this.getY() > col){
+				if (this.getX() < row){
+					int i = this.getX()+1;
+					for(int j = this.getY()-1; j >= col && i <= row; j--){
 						if(f[i][j] != null && j != col && i != row){
 							return false;
 						}
 						i++;
 					}
 				}
-				else if (x > row){
-					int i = x-1;
-					for(int j = y-1; j >= col && i >= row; j--){
+				else if (this.getX() > row){
+					int i = this.getX()-1;
+					for(int j = this.getY()-1; j >= col && i >= row; j--){
 						if(f[i][j] != null && j != col && i != row){
 							return false;
 						}

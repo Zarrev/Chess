@@ -8,24 +8,26 @@ public final class Pawn extends Figure {
 	
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
-		if(color)
+		if(this.isColor())
 	    {
-			if(x-row == 1 && f[row][col] == null && y == col) {
+			if(this.getX()-row == 1 && f[row][col] == null && this.getY() == col) {
 				return true;
 			}
 			else if (f[row][col] != null){
-				if (x-row == 1 && f[row][col].isColor() != color && (y-col == 1 || y-col == - 1)){
+				if (this.getX()-row == 1 && f[row][col].isColor() != this.isColor() && (this.getY()-col == 1
+						|| this.getY()-col == - 1)){
 					return true;
 				}
 			}
 	    }
 	    else
 	    {
-	    	if (x-row == - 1 &&  f[row][col] == null && y == col) {
+	    	if (this.getX()-row == - 1 &&  f[row][col] == null && this.getY() == col) {
 	    		return true;
 	    	}
 	    	else if (f[row][col] != null){
-	    		if (x-row == - 1 &&  f[row][col].isColor() != color && (y-col == 1 || y-col == - 1)){
+	    		if (this.getX()-row == - 1 &&  f[row][col].isColor() != this.isColor() &&
+	    				(this.getY()-col == 1 || this.getY()-col == - 1)){
 	    			return true;
 	    		}
 	    	}

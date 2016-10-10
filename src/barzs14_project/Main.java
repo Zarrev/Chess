@@ -3,7 +3,7 @@ package barzs14_project;
 public class Main {
 
 	public static void main(String[] args) {
-		Board b = new Board();
+		Game b = new Game();
 		while(true){
 			if (b.isWhichPlayer()){
 				System.out.println("White Player turn!");

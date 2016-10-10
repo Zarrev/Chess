@@ -4,13 +4,21 @@ public final class Knight extends Figure {
 
 	public Knight(boolean color, String name) {
 		super(color, name);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
-		// TODO Auto-generated method stub
-		return true;
+		if(f[row][col] != null){
+			if(f[row][col].isColor() == this.isColor()){
+				return false;
+			}
+		}
+		
+		if((row - this.getX())*(row - this.getX()) + (col - this.getY())*(col - this.getY()) == 5){
+			return true;
+		}
+		
+		return false;
 	}
 
 }

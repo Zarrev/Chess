@@ -13,10 +13,8 @@ public final class Queen extends Figure {
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
-		B.setX(this.getX());
-		B.setY(this.getY());
-		R.setX(this.getX());
-		R.setY(this.getY());
+		B.setXY(this.getX(),this.getY());
+		R.setXY(this.getX(),this.getY());
 		return B.step(row, col, f) || R.step(row, col, f);
 	}
 
