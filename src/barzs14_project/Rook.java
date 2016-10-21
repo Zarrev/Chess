@@ -9,6 +9,9 @@ public final class Rook extends Figure {
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
+		if(row > 7 || col > 7 || row < 0 || col < 0)
+			return false;
+		
 		if (this.getX() == row && col != this.getY()){
 			if (col > this.getY()){
 				for (int i = this.getY()+1; i <= col; i++){

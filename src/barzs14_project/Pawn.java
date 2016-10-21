@@ -9,11 +9,30 @@ public final class Pawn extends Figure {
 		firstStep = 0;
 	}
 	
+	public boolean hit(int row, int col, Figure[][] f){
+		if (f[row][col] != null && this.isColor()){
+			if (this.getX()-row == 1 && f[row][col].isColor() != this.isColor() && (this.getY()-col == 1
+					|| this.getY()-col == - 1)){
+				return true;
+			}
+		}
+		if (f[row][col] != null && !this.isColor()){
+    		if (this.getX()-row == - 1 &&  f[row][col].isColor() != this.isColor() &&
+    				(this.getY()-col == 1 || this.getY()-col == - 1)){
+    			return true;
+    		}
+    	}
+		return false;
+	}
+	
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
+		if(row > 7 || col > 7 || row < 0 || col < 0)
+			return false;
+		
 		if(this.isColor())
 	    {
-			if(firstStep == 0 && row+2 == this.getX() && col == this.getY()){
+			if(firstStep == 0 && row+2 == this.getX() && col == this.getY() && f[row+1][col] == null){
 				firstStep++;
 				return true;
 			}
@@ -21,16 +40,13 @@ public final class Pawn extends Figure {
 			if(this.getX()-row == 1 && f[row][col] == null && this.getY() == col) {
 				return true;
 			}
-			else if (f[row][col] != null){
-				if (this.getX()-row == 1 && f[row][col].isColor() != this.isColor() && (this.getY()-col == 1
-						|| this.getY()-col == - 1)){
-					return true;
-				}
+			else{
+				this.hit(row,col,f);
 			}
 	    }
 	    else
 	    {
-	    	if(firstStep == 0 && row-2 == this.getX() && col == this.getY()){
+	    	if(firstStep == 0 && row-2 == this.getX() && col == this.getY() && f[row-1][col] == null){
 				firstStep++;
 				return true;
 			}
@@ -38,11 +54,8 @@ public final class Pawn extends Figure {
 	    	if (this.getX()-row == - 1 &&  f[row][col] == null && this.getY() == col) {
 	    		return true;
 	    	}
-	    	else if (f[row][col] != null){
-	    		if (this.getX()-row == - 1 &&  f[row][col].isColor() != this.isColor() &&
-	    				(this.getY()-col == 1 || this.getY()-col == - 1)){
-	    			return true;
-	    		}
+	    	else{
+	    		this.hit(row,col,f);
 	    	}
 	    }
 		return false;

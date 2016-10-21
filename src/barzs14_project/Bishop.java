@@ -8,6 +8,9 @@ public final class Bishop extends Figure {
 
 	@Override
 	public boolean step(int row, int col, Figure[][] f) {
+		if(row > 7 || col > 7 || row < 0 || col < 0)
+			return false;
+		
 		if ((this.getX()-row == this.getY()-col) || (row-this.getX() == col-this.getY())){
 			if (this.getY() < col){
 				if(this.getX() < row){

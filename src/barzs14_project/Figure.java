@@ -13,9 +13,6 @@ public abstract class Figure {
 		y = -1;
 	}
 
-	
-	//TODO
-	//set függvények egyben
 	public int getX() {
 		return x;
 	}
