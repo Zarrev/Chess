@@ -10,20 +10,8 @@ public class Game {
 	private Scanner sc;
 	private Figure choosen;
 	private int row, col;
-	
-	private class possbileSteps{
-		public int row;
-		public int col;
-		public String name;
-		
-		public possbileSteps(int row, int col, String name){
-			this.row = row;
-			this.col = col;
-			this.name = name;
-		}
-	}
-	
-	Vector<possbileSteps> posStep = new Vector<>();
+	private Figure White_King;
+	private Figure Black_King;
 	
 	public Game() {
 		System.out.println("The game has begun!");
@@ -47,8 +35,20 @@ public class Game {
 				}
 			}
 		}
+		White_King = table[3][4];
+		Black_King = table[0][3];
 	}
-
+	
+	//TODO
+	public void setKings(int i, int j){
+		if (table[i][j] instanceof King) {
+			if(this.table[i][j].isColor())
+				this.White_King = table[i][j];
+			if(!this.table[i][j].isColor())
+				this.Black_King = table[i][j];
+		}
+	}
+	
 	public void reset(){
 		System.out.println("New Game has begun!");
 		table = new Figure[][]{
@@ -63,6 +63,8 @@ public class Game {
 		};
 		whichPlayer = true;
 		choosen = null;
+		White_King = table[7][3];
+		Black_King = table[0][3];
 	}
 
 	@Override
@@ -112,6 +114,12 @@ public class Game {
 	public void choose(){
 		System.out.println("Which figure is your choosen?");
 		boolean correct = false;
+		if(this.whichPlayer == ((King) White_King).check(table)){
+			this.choosen = White_King;
+			this.row = this.choosen.getX();
+			this.col = this.choosen.getY();
+			return;
+		}
 		
 		while(!correct){
 			readRowCol();
@@ -125,7 +133,9 @@ public class Game {
 		}
 	}
 	//TODO
+	//hollandia tukorben
 	// a kiraly tuti leutheto :'D
+	/*
 	public boolean checkStep(int x, int y, int row, int col){
 		if (this.table[x][y] instanceof King) {
 			for (possbileSteps e : this.posStep) {
@@ -161,13 +171,34 @@ public class Game {
 							&& !e.name.contains("Pawn")){
 						return false;
 					}
+					
 				}
 			}	
 		}
 		
 		return true;
 	}
-	
+	*/
+	/*
+	public void checkStep(int x, int y, int row, int col){
+		Vector<Figure.PS> tmp = new Vector<>();
+		if (table[x][y] instanceof King) {
+			for (Figure.PS K : table[x][y].getSteps()) {
+				for(int i = 0; i < 8; i++){
+					for(int j = 0; j < 8; j++){
+						if(table[i][j] instanceof Pawn){
+							//System.out.println(table[i][j].getName() + "\n" + table[i][j].getX() + " " + table[i][j].getY() + " " + K.x + " " + K.y  );
+							if(!((Pawn)table[i][j]).hit(K.x,K.y,table[x][y])){
+								tmp.add(K);
+							}
+						}
+					}
+				}
+			}
+			table[x][y].setSteps(tmp);
+		}
+	}
+	*/
 	public void step(){
 		if(choosen.getName().equals("END")){
 			return;
@@ -177,7 +208,8 @@ public class Game {
 		
 		while(!correct){
 			readRowCol();
-			if ((table[row][col] == null || whichPlayer != table[row][col].isColor()) && choosen.step(row, col, table) && checkStep(choosen.getX(),choosen.getY(),this.row,this.col)){
+			if ((table[row][col] == null || whichPlayer != table[row][col].isColor())
+					&& choosen.step(row, col, table) /*&& checkStep(choosen.getX(),choosen.getY(),this.row,this.col)*/){
 				correct = true;
 				table[row][col] = choosen;
 				table[choosen.getX()][choosen.getY()] = null;
@@ -214,27 +246,55 @@ public class Game {
 	}
 	 //TODO
 	private void allPossibleStep(){
-		if(!posStep.isEmpty())
-			posStep.clear();
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(this.table[i][j] != null){
+					if(!this.table[i][j].getSteps().isEmpty()){
+						this.table[i][j].clearSteps();
+					}
+				}
+			}
+		}
+		
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
 				if(table[i][j] != null){
 					for(int k = 0; k < 8; k++){
 						for(int l = 0; l < 8; l++){
-							if((table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table) && checkStep(i,j,k,l)){
-								posStep.add(new possbileSteps(k, l, table[i][j].getName()));
+							if((table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) 
+									&& table[i][j].step(k, l, table) /*&& checkStep(i,j,k,l)*/){
+								table[i][j].addSteps(k,l);
 							}
 						}
 					}
 				}
 			}
 		}
+		/*
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(table[i][j] instanceof King){
+					for(int k = 0; k < 8; k++){
+						for(int l = 0; l < 8; l++){
+							System.out.println(k + " " + l);
+							checkStep(i,j,k,l);
+						}
+					}
+				}
+			}
+		}
+		*/
 	}
 	
 	public void printPosStep(){
-		allPossibleStep();
-		for (possbileSteps e : posStep) {
-			System.out.println(e.name + " : (" + e.row + " , " + e.col + ")");
+		this.allPossibleStep();
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(this.table[i][j] != null){
+					if(!this.table[i][j].getSteps().isEmpty())
+						System.out.println(table[i][j].stepToString());
+				}
+			}
 		}
 	}
 }

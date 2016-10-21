@@ -1,9 +1,21 @@
 package barzs14_project;
 
+import java.util.Vector;
+
 public abstract class Figure {
+	protected class PS{
+		public int x;
+		public int y;
+		public PS(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+	}
 	protected boolean color;
 	protected String name;
 	protected int x, y;
+	protected Vector<PS> possibleSteps;
 	
 	public Figure(boolean color, String name) {
 		super();
@@ -11,6 +23,7 @@ public abstract class Figure {
 		this.name = name;
 		x = -1;
 		y = -1;
+		possibleSteps = new Vector<>();
 	}
 
 	public int getX() {
@@ -34,5 +47,35 @@ public abstract class Figure {
 
 	public String getName() {
 		return name;
+	}
+	
+	public Vector<PS> getSteps(){
+		return possibleSteps;
+	}
+	
+	public void addSteps(int k, int l){
+		this.possibleSteps.add(new PS(k,l));
+	}
+	
+	public void delSteps(PS e){
+		this.possibleSteps.remove(e);
+	}
+	
+	public void setSteps(Vector<PS> o){
+		this.possibleSteps = o;
+	}
+	
+	public String stepToString(){
+		StringBuilder sb = new StringBuilder();
+		for (PS ps : possibleSteps) {
+			sb.append(this.getName() + ": (");
+			sb.append(ps.x + ", ");
+			sb.append(ps.y + ")\n");
+		}
+		return sb.toString();
+	}
+	
+	public void clearSteps(){
+		this.possibleSteps.clear();
 	}
 }

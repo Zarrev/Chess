@@ -9,15 +9,15 @@ public final class Pawn extends Figure {
 		firstStep = 0;
 	}
 	
-	public boolean hit(int row, int col, Figure[][] f){
-		if (f[row][col] != null && this.isColor()){
-			if (this.getX()-row == 1 && f[row][col].isColor() != this.isColor() && (this.getY()-col == 1
+	public boolean hit(int row, int col, Figure f){
+		if (f != null && this.isColor()){
+			if (this.getX()-row == 1 && f.isColor() != this.isColor() && (this.getY()-col == 1
 					|| this.getY()-col == - 1)){
 				return true;
 			}
 		}
-		if (f[row][col] != null && !this.isColor()){
-    		if (this.getX()-row == - 1 &&  f[row][col].isColor() != this.isColor() &&
+		if (f != null && !this.isColor()){
+    		if (this.getX()-row == - 1 &&  f.isColor() != this.isColor() &&
     				(this.getY()-col == 1 || this.getY()-col == - 1)){
     			return true;
     		}
@@ -41,7 +41,7 @@ public final class Pawn extends Figure {
 				return true;
 			}
 			else{
-				this.hit(row,col,f);
+				this.hit(row,col,f[row][col]);
 			}
 	    }
 	    else
@@ -55,7 +55,7 @@ public final class Pawn extends Figure {
 	    		return true;
 	    	}
 	    	else{
-	    		this.hit(row,col,f);
+	    		this.hit(row,col,f[row][col]);
 	    	}
 	    }
 		return false;
