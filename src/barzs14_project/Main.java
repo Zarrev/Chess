@@ -25,25 +25,16 @@ public class Main {
 					System.out.println(b);
 					break;
 				case("1"):
-					if (b.isPlayer()){
-						System.out.println("White Player turn!");
-					}
-					else{
-						System.out.println("Black Player turn!");
-					}
-					System.out.println(b);
-					b.choose();
-					System.out.println("The choosen figure is " + b.getChoosen().getName());
-					b.step();
-					System.out.println(b);
+					b.play();
 					break;
 				case("2"):
 					b.figurePos();
 					break;
 				case("3"):
+					b.checkOnTheTable();
 					break;
 				case("4"):
-					b.printPosStep();;
+					b.toStringPS();
 					break;
 				case("5"):
 					b.reset();

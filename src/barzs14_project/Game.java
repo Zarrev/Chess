@@ -10,61 +10,63 @@ public class Game {
 	private Scanner sc;
 	private Figure choosen;
 	private int row, col;
-	private Figure White_King;
-	private Figure Black_King;
+	private boolean check = false;
+	private class PS{
+		public int x;
+		public int y;
+		public String name;
+		public PS(int x, int y, String name) {
+			super();
+			this.x = x;
+			this.y = y;
+			this.name = name;
+		}
+		@Override
+		public String toString() {
+			return this.name + "\t:\t" + "(" + this.x + ", " + this.y + ")";
+		}
+		
+	}
+	private Vector<PS> possibleSteps = new Vector<>();
+	
+	private King WK;
+	private King BK;
+	
+	private void makeTable(){
+		this.WK = new King(true,"White_King");
+		this.BK = new King(false,"Black_King");
+		this.table = new Figure[][]{
+			{new Rook(false,"Black_Rook_1"), new Knight(false,"Black_Knight_1"), new Bishop(false,"Black_Bishop_1"), null, null, new Bishop(false,"Black_Bishop_2"), new Knight(false,"Black_Knight_2"), new Rook(false,"Black_Rook_2")},
+			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), new Pawn(false,"Black_Pawn_6"), new Pawn(false,"Black_Pawn_7"), new Pawn(false,"Black_Pawn_8")}, 
+			{null, null, null, null, new Queen(false,"Black_Queen"), BK, null, null},
+			{null, null, null, null, null, null, null, null},
+			{null, null, null, null, WK, new Bishop(true,"White_Bishop_1"), null, null},
+			{null, null, null, null, null, null, null, null},
+			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
+			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), null, null, new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
+		};
+		this.whichPlayer = true;
+		this.choosen = null;
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(this.table[i][j] != null){
+					this.table[i][j].setXY(i,j);
+				}
+				
+			}
+		}
+	}
 	
 	public Game() {
 		System.out.println("The game has begun!");
-		table = new Figure[][]{
-			{new Rook(false,"Black_Rook_1"), new Knight(false,"Black_Knight_1"), new Bishop(false,"Black_Bishop_1"), new King(false,"Black_King"), new Queen(false,"Black_Queen"), new Bishop(false,"Black_Bishop_2"), new Knight(false,"Black_Knight_2"), new Rook(false,"Black_Rook_2")},
-			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), new Pawn(false,"Black_Pawn_6"), new Pawn(false,"Black_Pawn_7"), new Pawn(false,"Black_Pawn_8")}, 
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, new King(true,"White_King"), null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
-			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), null, new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
-		};
-		whichPlayer = true;
-		sc = new Scanner(System.in);
-		choosen = null;
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 8; j++){
-				if(table[i][j] != null){
-					table[i][j].setXY(i,j);
-				}
-			}
-		}
-		White_King = table[3][4];
-		Black_King = table[0][3];
-	}
-	
-	//TODO
-	public void setKings(int i, int j){
-		if (table[i][j] instanceof King) {
-			if(this.table[i][j].isColor())
-				this.White_King = table[i][j];
-			if(!this.table[i][j].isColor())
-				this.Black_King = table[i][j];
-		}
+		this.makeTable();
+		this.sc = new Scanner(System.in);
+
 	}
 	
 	public void reset(){
 		System.out.println("New Game has begun!");
-		table = new Figure[][]{
-			{new Rook(false,"Black_Rook_1"), new Knight(false,"Black_Knight_1"), new Bishop(false,"Black_Bishop_1"), new King(false,"Black_King"), new Queen(false,"Black_Queen"), new Bishop(false,"Black_Bishop_2"), new Knight(false,"Black_Knight_2"), new Rook(false,"Black_Rook_2")},
-			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), new Pawn(false,"Black_Pawn_6"), new Pawn(false,"Black_Pawn_7"), new Pawn(false,"Black_Pawn_8")}, 
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
-			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), new King(true,"White_King"), new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
-		};
-		whichPlayer = true;
-		choosen = null;
-		White_King = table[7][3];
-		Black_King = table[0][3];
+		this.makeTable();
 	}
 
 	@Override
@@ -112,15 +114,9 @@ public class Game {
 	}
 	
 	public void choose(){
+		this.isItCheck(whichPlayer);
 		System.out.println("Which figure is your choosen?");
 		boolean correct = false;
-		if(this.whichPlayer == ((King) White_King).check(table)){
-			this.choosen = White_King;
-			this.row = this.choosen.getX();
-			this.col = this.choosen.getY();
-			return;
-		}
-		
 		while(!correct){
 			readRowCol();
 			if (table[row][col] != null && whichPlayer == table[row][col].isColor()){
@@ -131,96 +127,65 @@ public class Game {
 				System.out.println("Wrong choose! Try again!");
 			}
 		}
+		System.out.println("The choosen figure is " + this.getChoosen().getName());
 	}
-	//TODO
-	//hollandia tukorben
-	// a kiraly tuti leutheto :'D
-	/*
-	public boolean checkStep(int x, int y, int row, int col){
-		if (this.table[x][y] instanceof King) {
-			for (possbileSteps e : this.posStep) {
-				if(!this.table[x][y].getName().equals(e.name)){
-					// a gond abbol adodik, hogy a paraszt 1-et vagy 2-t lephet elore ami kicsit megneheziti a vizsgalatot (az elso ket if nelkul jobb eredmenyt de nem jot kapok)
-					// a leheteseges lepesbol siman kilehet szamolni hogy a paraszt hol al ami segitsegevel megtudjuk mondani hova nem(!) lephet a királyunk
-					//tehat pl a table[e.row-1][e.col+1] az egyenlo lehet a paraszttal es igy mar vizsgalhato hogy hova utlephetne (sajat kif)
-					//asszem ezzel megoldottam a problemat
-					//ezzel vizsgalhato, hogy mikor van sakkban a kiraly, mert ha valamelyik babu ra lephet a helyere az sakkot jelent
-					//ezzel vizsgalhato a patt is, mert a kiraly helyere igy nem lephet senki, viszont o sem lephet sehova es o van egyedul az asztalon a sajat szinebol
-					//ezzel vizsgalhato a sakkmatt is, mert ha sakkba van a kiraly es nincs lehetosege lepni akkor vege :)
-					if(e.row+1 == row && (e.col+1 == col || e.col-1 == col) && e.name.contains("Pawn") &&  e.name.contains("Black") == this.table[x][y].getName().contains("White")){
-						if(this.table[row-2][col-1] instanceof Pawn){
-							if(((Pawn)table[row-2][col-1]).hit(x,y,table))
-								return false;
-						}
-						if(this.table[row-2][col-+1] instanceof Pawn){
-							if(((Pawn)table[row-2][col+1]).hit(x,y,table))
-								return false;
-						}
-					}
-					if(e.row-1 == row && (e.col+1 == col || e.col-1 == col) && e.name.contains("Pawn") && e.name.contains("White") == this.table[x][y].getName().contains("Black")){
-						if(this.table[row+2][col-1] instanceof Pawn){
-							if(((Pawn)table[row-2][col-1]).hit(x,y,table))
-								return false;
-						}
-						if(this.table[row+2][col-+1] instanceof Pawn){
-							if(((Pawn)table[row-2][col+1]).hit(x,y,table))
-								return false;
-						}
-					}
-					if(e.row == row && e.col == col && e.name.contains("Black") != this.table[x][y].getName().contains("Black") 
-							&& !e.name.contains("Pawn")){
-						return false;
-					}
-					
-				}
-			}	
+
+	public void play(){
+		if (this.isPlayer()){
+			System.out.println("White Player turn!");
 		}
-		
-		return true;
-	}
-	*/
-	/*
-	public void checkStep(int x, int y, int row, int col){
-		Vector<Figure.PS> tmp = new Vector<>();
-		if (table[x][y] instanceof King) {
-			for (Figure.PS K : table[x][y].getSteps()) {
-				for(int i = 0; i < 8; i++){
-					for(int j = 0; j < 8; j++){
-						if(table[i][j] instanceof Pawn){
-							//System.out.println(table[i][j].getName() + "\n" + table[i][j].getX() + " " + table[i][j].getY() + " " + K.x + " " + K.y  );
-							if(!((Pawn)table[i][j]).hit(K.x,K.y,table[x][y])){
-								tmp.add(K);
-							}
-						}
-					}
-				}
-			}
-			table[x][y].setSteps(tmp);
+		else{
+			System.out.println("Black Player turn!");
 		}
+		System.out.println(this);
+		this.choose();
+		this.step();
+		while(this.check){
+			this.choose();
+			this.step();
+		}
+		System.out.println(this);
 	}
-	*/
+	
 	public void step(){
-		if(choosen.getName().equals("END")){
-			return;
-		}
+		this.isItCheck(whichPlayer);
 		System.out.println("Where would you like to step?");
 		boolean correct = false;
 		
 		while(!correct){
 			readRowCol();
 			if ((table[row][col] == null || whichPlayer != table[row][col].isColor())
-					&& choosen.step(row, col, table) /*&& checkStep(choosen.getX(),choosen.getY(),this.row,this.col)*/){
+					&& choosen.step(row, col, table)){
 				correct = true;
+				int oldX = choosen.getX();
+				int oldY = choosen.getY();
+				
 				table[row][col] = choosen;
 				table[choosen.getX()][choosen.getY()] = null;
 				table[row][col].setXY(row,col);
+				
+				this.isItCheck(whichPlayer);
+				if(this.check){
+					System.out.println("Your King is still check! Wrong step! You can choose a figure again!");
+					choosen = table[row][col];
+					table[oldX][oldY] = choosen;
+					table[oldX][oldY].setXY(oldX, oldY);
+					table[row][col] = null;
+				}
+				else{
+					this.check = false;
+				}
 				choosen = null;
 			}
 			else{
 				System.out.println("Wrong step! Try again!");
 			}
+			if(!correct){
+				this.choose();
+			}
 		}
-		whichPlayer = !whichPlayer;
+		if(!this.check)
+			whichPlayer = !whichPlayer;
 	}
 
 	public boolean isPlayer() {
@@ -244,57 +209,78 @@ public class Game {
 			}
 		}
 	}
-	 //TODO
-	private void allPossibleStep(){
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 8; j++){
-				if(this.table[i][j] != null){
-					if(!this.table[i][j].getSteps().isEmpty()){
-						this.table[i][j].clearSteps();
-					}
-				}
-			}
-		}
-		
+
+	private void whereCanStep(){
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
 				if(table[i][j] != null){
 					for(int k = 0; k < 8; k++){
 						for(int l = 0; l < 8; l++){
-							if((table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) 
-									&& table[i][j].step(k, l, table) /*&& checkStep(i,j,k,l)*/){
-								table[i][j].addSteps(k,l);
+							if((i != k && j != l) &&(table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table))
+							{								
+								table[k][l] = table[i][j];
+								table[i][j] = null;
+								table[k][l].setXY(k,l);
+								this.isItCheck(table[k][l].isColor());
+								table[i][j] = table[k][l];
+								table[k][l] = null;
+								table[i][j].setXY(i, j);
+								if(!this.check){
+									possibleSteps.add(new PS(k,l,table[i][j].getName()));
+								}
+								//System.out.println(table[i][j].getName() + "\t:\t" + "(" + k + ", " + l + ")");
 							}
 						}
 					}
 				}
 			}
 		}
-		/*
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 8; j++){
-				if(table[i][j] instanceof King){
-					for(int k = 0; k < 8; k++){
-						for(int l = 0; l < 8; l++){
-							System.out.println(k + " " + l);
-							checkStep(i,j,k,l);
-						}
-					}
-				}
+	}
+
+	private void isItCheck(boolean color){
+		if(color == true){
+			if(!((King)this.WK).checkScan(WK.getX(), WK.getY(), table)){
+				this.check = true;
+			}
+			else{
+				this.check = false;
 			}
 		}
-		*/
+		else{
+			if (!((King)this.BK).checkScan(WK.getX(), WK.getY(), table)){
+				this.check = true;
+			}
+			else{
+				this.check = false;
+			}
+		}
 	}
 	
-	public void printPosStep(){
-		this.allPossibleStep();
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 8; j++){
-				if(this.table[i][j] != null){
-					if(!this.table[i][j].getSteps().isEmpty())
-						System.out.println(table[i][j].stepToString());
-				}
+	public void checkOnTheTable(){
+		this.isItCheck(whichPlayer);
+		if(!this.whichPlayer){
+			if(this.check){
+				System.out.println("White King is in check!");
 			}
+		}
+		else{
+			if(this.check){
+				System.out.println("Black King is in check!");
+			}
+		}
+		
+		if(!this.check){
+			System.out.println("Nobody is in check!");
+		}
+	}
+
+	public void toStringPS(){
+		if(!this.possibleSteps.isEmpty()){
+			this.possibleSteps.clear();
+		}
+		this.whereCanStep();
+		for (PS ps : possibleSteps) {
+			System.out.println(ps);
 		}
 	}
 }
