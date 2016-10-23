@@ -6,11 +6,11 @@ import java.util.Vector;
 public class Game {
 
 	private Figure[][] table;
-	private boolean whichPlayer = true;
+	private boolean whichPlayer;
 	private Scanner sc;
 	private Figure choosen;
 	private int row, col;
-	private boolean check = false;
+	private boolean check;
 	private class PS{
 		public int x;
 		public int y;
@@ -28,7 +28,7 @@ public class Game {
 		
 	}
 	private Vector<PS> possibleSteps = new Vector<>();
-	
+	private boolean checkMate, checkStalemate;
 	private King WK;
 	private King BK;
 	
@@ -40,7 +40,7 @@ public class Game {
 			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), new Pawn(false,"Black_Pawn_6"), new Pawn(false,"Black_Pawn_7"), new Pawn(false,"Black_Pawn_8")}, 
 			{null, null, null, null, new Queen(false,"Black_Queen"), BK, null, null},
 			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, WK, new Bishop(true,"White_Bishop_1"), null, null},
+			{null, null, null, null, WK, null, new Bishop(true,"White_Bishop_1"), null},
 			{null, null, null, null, null, null, null, null},
 			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
 			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), null, null, new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
@@ -55,6 +55,9 @@ public class Game {
 				
 			}
 		}
+		check = false;
+		checkMate = false;
+		checkStalemate = false;
 	}
 	
 	public Game() {
@@ -115,7 +118,8 @@ public class Game {
 		}
 	}
 	
-	public void choose(){
+	private void choose(){
+		
 		System.out.println("Which figure is your choosen?");
 		boolean correct = false;
 		while(!correct){
@@ -128,11 +132,12 @@ public class Game {
 				System.out.println("Wrong choose! Try again!");
 			}
 		}
-		System.out.println("The choosen figure is " + this.getChoosen().getName());
+		System.out.println("The choosen figure is " + this.choosen.getName());
+		
 	}
 
 	public void play(){
-		if (this.isPlayer()){
+		if (this.whichPlayer){
 			System.out.println("White Player turn!");
 		}
 		else{
@@ -141,16 +146,22 @@ public class Game {
 		System.out.println(this);
 		this.choose();
 		this.step();
-		this.isItCheck();
+		
 		while(this.check && choosen != null){
 			this.choose();
 			this.step();
-			this.isItCheck();
 		}
+		
 		System.out.println(this);
 	}
 	
-	public void step(){
+	private void isItEnd(){
+		//TODO
+		//megnezi h patt vagy sakkmatt e es kilep a jatekbol, de lotte kiirja a nyertest, lehet felajanlja majd hogy ujra kezd meg nem tudom
+		
+	}
+	
+	private void step(){
 		this.isItCheck();
 		System.out.println("Where would you like to step?");
 		boolean correct = false;
@@ -188,17 +199,9 @@ public class Game {
 				this.choose();
 			}
 		}
-		if(!this.check)
 			whichPlayer = !whichPlayer;
 		this.isItCheck();
-	}
-
-	public boolean isPlayer() {
-		return whichPlayer;
-	}
-
-	public Figure getChoosen() {
-		return choosen;
+		endTest();
 	}
 	
 	public void closeStream(){
@@ -216,43 +219,32 @@ public class Game {
 	}
 
 	private void virtualStep(int i, int j, int k, int l){
-		Figure tmp = table[i][j];
+		Figure tmp = table[k][l];
+		table[k][l] = table[i][j];
+		table[i][j] = null;
+		table[k][l].setXY(k, l);
+		isItCheck();
 		table[i][j] = table[k][l];
 		table[k][l] = tmp;
-		table[k][l].setXY(k, l);
+		table[i][j].setXY(i, j);
 	}
 	
 	private void whereCanStep(){
+		if(!this.possibleSteps.isEmpty()){
+			this.possibleSteps.clear();
+		}
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
-				if(table[i][j] != null){
+				if(table[i][j] != null && table[i][j].isColor() == whichPlayer){
 					for(int k = 0; k < 8; k++){
 						for(int l = 0; l < 8; l++){
-							if(table[i][j].isColor() == whichPlayer && (table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table))
+							if((table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table))
 							{	
-								boolean tmpcheck = false;
+								
 								virtualStep(i, j, k, l);
-								if(table[k][l].isColor()){
-									if(!((King)this.WK).checkScan(WK.getX(), WK.getY(), table)){
-										tmpcheck = true;
-									}
-									else{
-										tmpcheck = false;
-									}
-								}
-								else{
-									if (!((King)this.BK).checkScan(WK.getX(), WK.getY(), table)){
-										tmpcheck = true;
-									}
-									else{
-										tmpcheck = false;
-									}
-								}
-								virtualStep(k, l, i, j);
-								if(!tmpcheck){
+								if(!check){
 									possibleSteps.add(new PS(k,l,table[i][j].getName()));
 								}
-								//System.out.println(table[i][j].getName() + "\t:\t" + "(" + k + ", " + l + ")");
 							}
 						}
 					}
@@ -263,34 +255,29 @@ public class Game {
 
 	private void isItCheck(){
 		if(whichPlayer){
-			if(!((King)this.WK).checkScan(WK.getX(), WK.getY(), table)){
+			this.WK.checkScan(WK.getX(), WK.getY(), table);
+			if(WK.getCheck())
 				this.check = true;
-			}
-			else{
+			else
 				this.check = false;
-			}
 		}
-		else{
-			if (!((King)this.BK).checkScan(WK.getX(), WK.getY(), table)){
+		else{		
+			this.BK.checkScan(BK.getX(), BK.getY(), table);
+			if(BK.getCheck())
 				this.check = true;
-			}
-			else{
+			else
 				this.check = false;
-			}
 		}
 	}
 	
 	public void checkOnTheTable(){
 		this.isItCheck();
-		if(this.whichPlayer){
-			if(this.check){
-				System.out.println("White King is in check!");
-			}
+		if(WK.getCheck()){
+			System.out.println("White King is in check!");
 		}
-		else{
-			if(this.check){
-				System.out.println("Black King is in check!");
-			}
+	
+		if(BK.getCheck()){
+			System.out.println("Black King is in check!");
 		}
 		
 		if(!this.check){
@@ -299,12 +286,36 @@ public class Game {
 	}
 
 	public void toStringPS(){
-		if(!this.possibleSteps.isEmpty()){
-			this.possibleSteps.clear();
-		}
+
+				
 		this.whereCanStep();
+		
 		for (PS ps : possibleSteps) {
 			System.out.println(ps);
 		}
 	}
+
+	public void endTest(){
+		whereCanStep();
+		if(possibleSteps.isEmpty()){
+			if(WK.getCheck()){
+				checkMate = true;
+				return;
+			}
+			else if (!WK.getCheck()){
+				checkStalemate = true;
+				return;
+			}
+			
+			if(BK.getCheck()){
+				checkMate = true;
+				return;
+			}
+			else if (!BK.getCheck()){
+				checkStalemate = true;
+				return;
+			}
+		}
+	}
+	
 }

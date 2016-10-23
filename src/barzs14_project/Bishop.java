@@ -10,7 +10,7 @@ public final class Bishop extends Figure {
 	public boolean step(int row, int col, Figure[][] f) {
 		if(row > 7 || col > 7 || row < 0 || col < 0)
 			return false;
-
+/*
 		if(((col-this.getY()) == (row-this.getX()) )|| ((col-this.getY()) == (this.getX()-row))){
 			if(this.getY() > col){
 				if(this.getX() > row){
@@ -56,10 +56,9 @@ public final class Bishop extends Figure {
 		}
 		
 		return false;
-	}	
-		
-		/*
-		if ((this.getX()-row == this.getY()-col) || (row-this.getX() == col-this.getY())){
+	}	*/
+
+		if(((col-this.getY()) == (row-this.getX()) )|| ((col-this.getY()) == (this.getX()-row))){
 			if (this.getY() < col){
 				if(this.getX() < row){
 					int i = this.getX()+1;
@@ -105,7 +104,7 @@ public final class Bishop extends Figure {
 		}
 		return false;
 	}
-*/
+
 
 
 }

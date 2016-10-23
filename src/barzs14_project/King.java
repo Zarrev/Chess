@@ -3,6 +3,16 @@ import java.lang.Math;
 
 public final class King extends Figure {
 	
+	private boolean check = false;
+	
+	public boolean getCheck(){
+		return this.check;
+	}
+	
+	public void setCheck(boolean check){
+		this.check = check;
+	}
+	
 	public King(boolean color, String name) {
 		super(color, name);
 	}
@@ -12,18 +22,22 @@ public final class King extends Figure {
 			for(int j = 0; j < 8; j++){
 				if(f[i][j] != null && f[i][j].isColor() != this.isColor()){
 					if(f[i][j] instanceof Pawn && ((Pawn)f[i][j]).hit(row,col,this)){
+						this.check = true;
 						return false;
 					}
 					else if(f[i][j] instanceof King && (((Math.abs(i-row) + Math.abs(j-col)) <= 1 )
 							|| (Math.abs(i-row) == 1 && Math.abs(j-col) == 1))){
+						this.check = true;
 						return false;
 					}
 					else if(!(f[i][j] instanceof King) &&  !(f[i][j] instanceof Pawn) && f[i][j].step(row, col, f)){
+						this.check = true;
 						return false;
 					}
 				}
 			}
 		}
+		this.check = false;
 		return true;
 	}
 
