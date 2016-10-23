@@ -1,6 +1,5 @@
 package barzs14_project;
 
-import java.util.Vector;
 
 public abstract class Figure {
 	
@@ -37,5 +36,5 @@ public abstract class Figure {
 
 	public String getName() {
 		return name;
-	}
+	}	
 }

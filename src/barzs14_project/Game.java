@@ -6,7 +6,7 @@ import java.util.Vector;
 public class Game {
 
 	private Figure[][] table;
-	private boolean whichPlayer;
+	private boolean whichPlayer = true;
 	private Scanner sc;
 	private Figure choosen;
 	private int row, col;
@@ -61,12 +61,14 @@ public class Game {
 		System.out.println("The game has begun!");
 		this.makeTable();
 		this.sc = new Scanner(System.in);
+		isItCheck();
 
 	}
 	
 	public void reset(){
 		System.out.println("New Game has begun!");
 		this.makeTable();
+		check = false;
 	}
 
 	@Override
@@ -114,7 +116,6 @@ public class Game {
 	}
 	
 	public void choose(){
-		this.isItCheck(whichPlayer);
 		System.out.println("Which figure is your choosen?");
 		boolean correct = false;
 		while(!correct){
@@ -140,15 +141,17 @@ public class Game {
 		System.out.println(this);
 		this.choose();
 		this.step();
-		while(this.check){
+		this.isItCheck();
+		while(this.check && choosen != null){
 			this.choose();
 			this.step();
+			this.isItCheck();
 		}
 		System.out.println(this);
 	}
 	
 	public void step(){
-		this.isItCheck(whichPlayer);
+		this.isItCheck();
 		System.out.println("Where would you like to step?");
 		boolean correct = false;
 		
@@ -164,13 +167,14 @@ public class Game {
 				table[choosen.getX()][choosen.getY()] = null;
 				table[row][col].setXY(row,col);
 				
-				this.isItCheck(whichPlayer);
+				this.isItCheck();
 				if(this.check){
 					System.out.println("Your King is still check! Wrong step! You can choose a figure again!");
 					choosen = table[row][col];
 					table[oldX][oldY] = choosen;
 					table[oldX][oldY].setXY(oldX, oldY);
 					table[row][col] = null;
+					correct = false;
 				}
 				else{
 					this.check = false;
@@ -186,6 +190,7 @@ public class Game {
 		}
 		if(!this.check)
 			whichPlayer = !whichPlayer;
+		this.isItCheck();
 	}
 
 	public boolean isPlayer() {
@@ -210,22 +215,41 @@ public class Game {
 		}
 	}
 
+	private void virtualStep(int i, int j, int k, int l){
+		Figure tmp = table[i][j];
+		table[i][j] = table[k][l];
+		table[k][l] = tmp;
+		table[k][l].setXY(k, l);
+	}
+	
 	private void whereCanStep(){
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
 				if(table[i][j] != null){
 					for(int k = 0; k < 8; k++){
 						for(int l = 0; l < 8; l++){
-							if((i != k && j != l) &&(table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table))
-							{								
-								table[k][l] = table[i][j];
-								table[i][j] = null;
-								table[k][l].setXY(k,l);
-								this.isItCheck(table[k][l].isColor());
-								table[i][j] = table[k][l];
-								table[k][l] = null;
-								table[i][j].setXY(i, j);
-								if(!this.check){
+							if(table[i][j].isColor() == whichPlayer && (table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table))
+							{	
+								boolean tmpcheck = false;
+								virtualStep(i, j, k, l);
+								if(table[k][l].isColor()){
+									if(!((King)this.WK).checkScan(WK.getX(), WK.getY(), table)){
+										tmpcheck = true;
+									}
+									else{
+										tmpcheck = false;
+									}
+								}
+								else{
+									if (!((King)this.BK).checkScan(WK.getX(), WK.getY(), table)){
+										tmpcheck = true;
+									}
+									else{
+										tmpcheck = false;
+									}
+								}
+								virtualStep(k, l, i, j);
+								if(!tmpcheck){
 									possibleSteps.add(new PS(k,l,table[i][j].getName()));
 								}
 								//System.out.println(table[i][j].getName() + "\t:\t" + "(" + k + ", " + l + ")");
@@ -237,8 +261,8 @@ public class Game {
 		}
 	}
 
-	private void isItCheck(boolean color){
-		if(color == true){
+	private void isItCheck(){
+		if(whichPlayer){
 			if(!((King)this.WK).checkScan(WK.getX(), WK.getY(), table)){
 				this.check = true;
 			}
@@ -257,8 +281,8 @@ public class Game {
 	}
 	
 	public void checkOnTheTable(){
-		this.isItCheck(whichPlayer);
-		if(!this.whichPlayer){
+		this.isItCheck();
+		if(this.whichPlayer){
 			if(this.check){
 				System.out.println("White King is in check!");
 			}

@@ -10,7 +10,55 @@ public final class Bishop extends Figure {
 	public boolean step(int row, int col, Figure[][] f) {
 		if(row > 7 || col > 7 || row < 0 || col < 0)
 			return false;
+
+		if(((col-this.getY()) == (row-this.getX()) )|| ((col-this.getY()) == (this.getX()-row))){
+			if(this.getY() > col){
+				if(this.getX() > row){
+					int j = 1;
+					for(int i = col+1; i < col; i++){
+						if(f[i][row+j] != null){
+							return false;
+						}
+						j++;
+					}
+				}
+				else{
+					int j=-1;
+		            for(int i= col+1; i < this.getY(); i++){
+		            	if(f[i][row+j] != null) {
+		            		return false;
+	            		} 
+		            	j--;
+            		}
+				}
+			}
+			 else{
+					if(this.getX()>row){
+					    int j=-1;
+					    for(int i= this.getY()+1; i < col; i++){
+					    	if(f[i][this.getX()+j] != null) {
+					    		return false;
+				    		} 
+					    	j--;
+				    	}
+					}
+					else{
+					    int j=1;
+					    for(int i= this.getY()+1; i < col; i++){
+					    	if(f[i][this.getX()+j] != null) {
+					    		return false;
+				    		}
+					    	j++;
+				    	}
+					}
+			 }
+			return true;
+		}
 		
+		return false;
+	}	
+		
+		/*
 		if ((this.getX()-row == this.getY()-col) || (row-this.getX() == col-this.getY())){
 			if (this.getY() < col){
 				if(this.getX() < row){
@@ -57,7 +105,7 @@ public final class Bishop extends Figure {
 		}
 		return false;
 	}
-
+*/
 
 
 }
