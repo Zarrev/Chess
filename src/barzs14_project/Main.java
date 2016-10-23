@@ -10,6 +10,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Game b = new Game();
+		boolean end = false;
 		while(running){
 			System.out.println("Press a Number and Enter what woud you like to do! \n"
 								+ "0\t-\t Draw board! \n"
@@ -19,13 +20,18 @@ public class Main {
 								+ "4\t-\t Write out all of possible step! \n"
 								+ "5\t-\t Restart game! \n"
 								+ "6\t-\t Exit.");
-			readOp = sc.next();
+			if(!end)
+				readOp = sc.next();
+			else{
+				readOp = "6";
+			}
 			switch(readOp){
 				case("0"):
 					System.out.println(b);
 					break;
 				case("1"):
 					b.play();
+					end = b.isItEnd();
 					break;
 				case("2"):
 					b.figurePos();
@@ -41,6 +47,7 @@ public class Main {
 					break;
 				case("6"):
 					System.out.println("The game has ended.");
+					System.out.println(b.getEndStr());
 					sc.close();
 					b.closeStream();
 					running = false;

@@ -31,6 +31,7 @@ public class Game {
 	private boolean checkMate, checkStalemate;
 	private King WK;
 	private King BK;
+	private String endStr = new String("The game was interrupted.");
 	
 	private void makeTable(){
 		this.WK = new King(true,"White_King");
@@ -155,10 +156,31 @@ public class Game {
 		System.out.println(this);
 	}
 	
-	private void isItEnd(){
+	public String getEndStr(){
+		return this.endStr;
+	}
+	
+	public boolean isItEnd(){
 		//TODO
 		//megnezi h patt vagy sakkmatt e es kilep a jatekbol, de lotte kiirja a nyertest, lehet felajanlja majd hogy ujra kezd meg nem tudom
+		if (checkMate){
+			if(WK.getCheck()){
+				endStr = "The winner is the Black Player!";
+				return true;
+			}
+			
+			if(BK.getCheck()){
+				endStr = "The winner is the White Player!";
+				return true;
+			}
+			
+		}
+		else if(checkStalemate){
+			endStr = "Draw!";
+			return true;
+		}
 		
+		return false;
 	}
 	
 	private void step(){
