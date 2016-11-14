@@ -3,9 +3,14 @@ package barzs14_project;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Optional;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -75,25 +80,31 @@ public class Main extends Application{
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		Thread th = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				while(!engine.isItEnd())
-					engine.play();
-				System.out.println("END");
-			}
-		});
-		th.setDaemon(true);
-		th.start();
+
 		launch();
 
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Scene sc = new Scene(bg.get());
-		primaryStage.setScene(sc);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Game: Chess");
+		alert.setHeaderText("Would you like to play chess?");
+		alert.setContentText("Choose your option.");
+
+		ButtonType buttonTypeOne = new ButtonType("PLAY");
+		ButtonType buttonTypeCancel = new ButtonType("EXIT", ButtonData.CANCEL_CLOSE);
+
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne){
+			engine.setDaemon(true);
+			engine.start();
+		}else {
+		    Platform.exit();
+		}
+		bg.setTheStage(primaryStage);
 		primaryStage.setTitle("Chess");
 		primaryStage.show();
 	}

@@ -3,7 +3,9 @@ package barzs14_project;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class Game {//implements Runnable {
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
+public class Game extends Thread{//implements Runnable {
 
 	private Figure[][] table;
 	private boolean whichPlayer;
@@ -117,7 +119,6 @@ public class Game {//implements Runnable {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -155,7 +156,7 @@ public class Game {//implements Runnable {
 		
 	}
 
-	public void play(){
+	public void play(){//TODO WHERECANSTEP
 		if (this.whichPlayer){
 			System.out.println("White Player turn!");
 		}
@@ -164,8 +165,8 @@ public class Game {//implements Runnable {
 		}
 		System.out.println(this);
 		this.choose();
+		whereCanStep();
 		this.step();
-		
 		System.out.println(this);
 		
 	}
@@ -175,8 +176,6 @@ public class Game {//implements Runnable {
 	}
 	
 	public boolean isItEnd(){
-		//TODO
-		//megnezi h patt vagy sakkmatt e es kilep a jatekbol, de lotte kiirja a nyertest, lehet felajanlja majd hogy ujra kezd meg nem tudom
 		if (checkMate){
 			if(WK.getCheck()){
 				endStr = "The winner is the Black Player!";
@@ -229,7 +228,7 @@ public class Game {//implements Runnable {
 				else{
 					this.check = false;
 				}
-				choosen = null;
+				
 			}
 			else{
 				System.out.println("Wrong step! Try again!");
@@ -238,14 +237,12 @@ public class Game {//implements Runnable {
 				this.choose();
 			}
 		}
-			whichPlayer = !whichPlayer;
+		choosen = null;
+		whichPlayer = !whichPlayer;
 		this.isItCheck();
 		endTest();
 	}
-	
-	//public void closeStream(){
-		//sc.close();
-	//}
+
 	
 	public void figurePos(){
 		for(int i = 0; i < 8; i++){
@@ -267,15 +264,51 @@ public class Game {//implements Runnable {
 		table[k][l] = tmp;
 		table[i][j].setXY(i, j);
 		if (table[i][j] instanceof Pawn) {
-			((Pawn) table[i][j]).resetFirstStep();;
+			if((((Pawn) table[i][j]).getX() == 1 && !((Pawn) table[i][j]).isColor()) ||  (((Pawn) table[i][j]).getX() == 6 && ((Pawn) table[i][j]).isColor()))
+				((Pawn) table[i][j]).resetFirstStep();
+		}
+	}
+	
+	public Figure getChossen() {
+		if (choosen instanceof Pawn) {
+			return (Pawn)choosen;			
+		}
+		if (choosen instanceof King) {
+			return (King)choosen;
 			
 		}
+		if (choosen instanceof Queen) {
+			return (Queen)choosen;
+			
+		}
+		if (choosen instanceof Rook) {
+			return (Rook)choosen;
+			
+		}
+		if (choosen instanceof Bishop) {
+			return (Bishop)choosen;
+			
+		}
+		if (choosen instanceof Knight) {
+			return (Knight)choosen;
+			
+		}
+		return null;
 	}
 	
 	private void whereCanStep(){
 		if(!this.possibleSteps.isEmpty()){
 			this.possibleSteps.clear();
 		}
+		
+		
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(table[i][j] != null && !table[i][j].getChossenPS().isEmpty())
+					table[i][j].clearPS();
+			}
+		}
+		
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
 				if(table[i][j] != null && table[i][j].isColor() == whichPlayer){
@@ -287,6 +320,8 @@ public class Game {//implements Runnable {
 								virtualStep(i, j, k, l);
 								if(!check){
 									possibleSteps.add(new PS(k,l,table[i][j].getName()));
+									table[i][j].add(k,l);
+									System.out.println(k+","+l+","+table[i][j].getName());
 								}
 							}
 						}
@@ -327,7 +362,7 @@ public class Game {//implements Runnable {
 			System.out.println("Nobody is in check!");
 		}
 	}
-
+	
 	public void toStringPS(){
 
 				
@@ -381,4 +416,13 @@ public class Game {//implements Runnable {
 		
 	}
 	*/
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(!this.isItEnd()){
+			this.play();
+			checkOnTheTable();
+		}
+	}
 }
