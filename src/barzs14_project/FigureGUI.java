@@ -36,21 +36,25 @@ public class FigureGUI{
 		for(int i = 0; i < blacksSqB.length; i++){
 			if(actS.equals(blacksSqB[i])){
 				blackS = actS;
+				whiteS = whiteSqB[i];
 			}
 		}
 		for(int i = 0; i < blacksSqW.length; i++){
 			if(actS.equals(blacksSqW[i])){
 				whiteS = actS;
+				blackS = blacksSqW[i];
 			}
 		}
 		for(int i = 0; i < whiteSqB.length; i++){
 			if(actS.equals(whiteSqB[i])){
 				blackS = actS;
+				whiteS = whiteSqB[i];
 			}
 		}
 		for(int i = 0; i < whiteSqW.length; i++){
 			if(actS.equals(whiteSqW[i])){
 				whiteS = actS;
+				blackS = blacksSqW[i];
 			}
 		}
 	}

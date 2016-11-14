@@ -3,7 +3,7 @@ package barzs14_project;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class Game implements Runnable {
+public class Game {//implements Runnable {
 
 	private Figure[][] table;
 	private boolean whichPlayer;
@@ -372,13 +372,13 @@ public class Game implements Runnable {
 	public void setYouCanGetData(boolean e) {
 		youCanGetData = e;
 	}
-	@Override
-	public void run() {
+	//@Override
+	/*public void run() {
 		while(!this.isItEnd())
 			this.play();
 		System.out.println("The game has ended.");
 		System.out.println(this.getEndStr());
 		
 	}
-	
+	*/
 }

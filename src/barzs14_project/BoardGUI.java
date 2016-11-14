@@ -112,9 +112,9 @@ public class BoardGUI {
 						Main.engine.setRC(y, x);
 						Main.engine.setYouCanGetData(true);
 						//event.consume();
-						tmp.setTextFill(Color.RED);
-						tmp.setText("");
-						BoardGUI.refresh();
+						//tmp.setTextFill(Color.RED);
+						
+						refresh();
 						
 						/*new Thread(new Runnable(){ //kulon szallon probaltam de null pointer exceptiont kapok
 							@Override
@@ -132,88 +132,86 @@ public class BoardGUI {
 		for (Node node : board.getChildren()) {
 	        if(GridPane.getRowIndex(node) == row+1 && GridPane.getColumnIndex(node) == col+1) {
 	        	if((row+col)%2 == 0){
-	        		System.out.println("feher");
-	        		
-	        		Platform.runLater(new Runnable(){
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							((Label) node).setTextFill(Color.RED);
-							((Label) node).textProperty().bind(new SimpleStringProperty(fg[row][col].getBlackS()));		
-						}
-					});
-					//((Label) node).setText(fg[row][col].getBlackS());
-					//((Label) node).textProperty().bind(new SimpleStringProperty(fg[row][col].getBlackS()));
+					((Label) node).setTextFill(Color.RED);
+					((Label) node).setText(fg[row][col].getWhiteS());
 				}
 				else{
-					//((Label) node).setText(fg[row][col].getBlackS());
+					((Label) node).setText(fg[row][col].getBlackS());
 					System.out.println("feka");
+					((Label) node).setTextFill(Color.BLUE);
 				}
 	        }
 		}
 	}
 	
-	public static void refresh() {//nincs kesz
-		BoardGUI tmp = new BoardGUI();
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 8; j++){
-				if(Main.engine.getTable()[i][j] != null){
-					if(Main.engine.getTable()[i][j].getName().contains("White")){
-						if(Main.engine.getTable()[i][j].getName().contains("Pawn")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Knight")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Rook")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("King")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Queen")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Bishop")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-					}
-					else if (Main.engine.getTable()[i][j].getName().contains("Black")){
-						if(Main.engine.getTable()[i][j].getName().contains("Pawn")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Knight")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Rook")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("King")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Queen")){
-							tmp.setGridPaneE(i,j);
-							return;
-						}
-						if(Main.engine.getTable()[i][j].getName().contains("Bishop")){
-							tmp.setGridPaneE(i,j);
-							return;
+	public void refresh() {//nincs kesz
+		Platform.runLater( new Runnable(){
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				for(int i = 0; i < 8; i++){
+					for(int j = 0; j < 8; j++){
+						if(Main.engine.getTable()[i][j] != null){
+							if(Main.engine.getTable()[i][j].getName().contains("White")){
+								if(Main.engine.getTable()[i][j].getName().contains("Pawn")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Knight")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Rook")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("King")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Queen")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Bishop")){
+									 setGridPaneE(i,j);
+									
+								}
+							}
+							else if (Main.engine.getTable()[i][j].getName().contains("Black")){
+								if(Main.engine.getTable()[i][j].getName().contains("Pawn")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Knight")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Rook")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("King")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Queen")){
+									 setGridPaneE(i,j);
+									
+								}
+								if(Main.engine.getTable()[i][j].getName().contains("Bishop")){
+									 setGridPaneE(i,j);
+									
+								}
+							}
 						}
 					}
 				}
-			}
-		}
 
+				
+			}
+		});
+		
 	}
 	
 }

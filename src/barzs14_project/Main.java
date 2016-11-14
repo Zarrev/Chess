@@ -75,7 +75,15 @@ public class Main extends Application{
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		Thread th = new Thread(engine);
+		Thread th = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(!engine.isItEnd())
+					engine.play();
+				System.out.println("END");
+			}
+		});
 		th.setDaemon(true);
 		th.start();
 		launch();
