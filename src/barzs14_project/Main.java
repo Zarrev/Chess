@@ -1,15 +1,26 @@
 package barzs14_project;
 
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
-public class Main {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-	private static Scanner sc = new Scanner(System.in);
-	private static String readOp; 
-	private static boolean running = true;
+public class Main extends Application{
 	
-	public static void main(String[] args) {
-		Game b = new Game();
+	public static Game engine = new Game();
+	private BoardGUI bg = new BoardGUI();
+
+	public static int maxSize = 60;
+	public static Font f = new Font(maxSize);
+	/*
+	private void ConsolTest(){
+		Scanner sc = new Scanner(System.in);
+		String readOp; 
+		boolean running = true;
 		boolean end = false;
 		while(running){
 			System.out.println("Press a Number and Enter what woud you like to do! \n"
@@ -27,35 +38,56 @@ public class Main {
 			}
 			switch(readOp){
 				case("0"):
-					System.out.println(b);
+					System.out.println(engine);
 					break;
 				case("1"):
-					b.play();
-					end = b.isItEnd();
+					engine.play();
+					end = engine.isItEnd();
 					break;
 				case("2"):
-					b.figurePos();
+					engine.figurePos();
 					break;
 				case("3"):
-					b.checkOnTheTable();
+					engine.checkOnTheTable();
 					break;
 				case("4"):
-					b.toStringPS();
+					engine.toStringPS();
 					break;
 				case("5"):
-					b.reset();
+					engine.reset();
 					break;
 				case("6"):
 					System.out.println("The game has ended.");
-					System.out.println(b.getEndStr());
+					System.out.println(engine.getEndStr());
 					sc.close();
-					b.closeStream();
+					engine.closeStream();
 					running = false;
 					break;
 				default:
 					break;
 			}
 		}
+	}
+	*/
+	public static void main(String[] args) {
+		 try {
+			f = Font.loadFont(new FileInputStream(new File("KINGFONT.TTF")), maxSize);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		Thread th = new Thread(engine);
+		th.setDaemon(true);
+		th.start();
+		launch();
+
+	}
+	
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Scene sc = new Scene(bg.get());
+		primaryStage.setScene(sc);
+		primaryStage.setTitle("Chess");
+		primaryStage.show();
 	}
 
 }

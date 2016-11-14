@@ -8,7 +8,9 @@ public final class Pawn extends Figure {
 		super(color, name);
 		firstStep = 0;
 	}
-	
+	public void resetFirstStep(){
+		firstStep = 0;
+	}
 	public boolean hit(int row, int col, Figure f){
 		if (f != null && this.isColor()){
 			if (this.getX()-row == 1 && f.isColor() != this.isColor() && (this.getY()-col == 1
@@ -41,7 +43,7 @@ public final class Pawn extends Figure {
 				return true;
 			}
 			else{
-				this.hit(row,col,f[row][col]);
+				return this.hit(row,col,f[row][col]);
 			}
 	    }
 	    else
@@ -55,9 +57,8 @@ public final class Pawn extends Figure {
 	    		return true;
 	    	}
 	    	else{
-	    		this.hit(row,col,f[row][col]);
+	    		return this.hit(row,col,f[row][col]);
 	    	}
 	    }
-		return false;
 	}
 }

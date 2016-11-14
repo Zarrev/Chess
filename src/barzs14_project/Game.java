@@ -3,14 +3,15 @@ package barzs14_project;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class Game {
+public class Game implements Runnable {
 
 	private Figure[][] table;
 	private boolean whichPlayer;
-	private Scanner sc;
+	//private Scanner sc;
 	private Figure choosen;
 	private int row, col;
 	private boolean check;
+	public boolean youCanGetData = false;
 	private class PS{
 		public int x;
 		public int y;
@@ -64,8 +65,7 @@ public class Game {
 	public Game() {
 		System.out.println("The game has begun!");
 		this.makeTable();
-		this.sc = new Scanner(System.in);
-		isItCheck();
+		//this.sc = new Scanner(System.in);
 
 	}
 	
@@ -104,19 +104,37 @@ public class Game {
 		return sb.toString();
 	}
 	
+	public Figure[][] getTable() {
+		return table;
+	}
+
 	private void readRowCol(){
 		System.out.println("Give a row coord: ");
-		row = sc.nextInt();
+		while(!youCanGetData){
+			if(youCanGetData){
+				break;
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//row = sc.nextInt();
+		System.out.println(row);
 		System.out.println("Give a col coord: ");
-		col = sc.nextInt();
+		//col = sc.nextInt();
+		System.out.println(col);
 		while(row > 7 || row < 0){
 			System.out.println("Wrong row coord! Try Again!");
-			row = sc.nextInt();
+			//row = sc.nextInt();
 		}
 		while(col > 7 || col < 0){
 			System.out.println("Wrong col coord! Try Again!");
-			col = sc.nextInt();
+			//col = sc.nextInt();
 		}
+		youCanGetData = false;
 	}
 	
 	private void choose(){
@@ -148,12 +166,8 @@ public class Game {
 		this.choose();
 		this.step();
 		
-		while(this.check && choosen != null){
-			this.choose();
-			this.step();
-		}
-		
 		System.out.println(this);
+		
 	}
 	
 	public String getEndStr(){
@@ -202,11 +216,14 @@ public class Game {
 				
 				this.isItCheck();
 				if(this.check){
-					System.out.println("Your King is still check! Wrong step! You can choose a figure again!");
+					System.out.println("Your King is in check! Wrong step! You can choose a figure again!");
 					choosen = table[row][col];
 					table[oldX][oldY] = choosen;
 					table[oldX][oldY].setXY(oldX, oldY);
 					table[row][col] = null;
+					if (table[oldX][oldY] instanceof Pawn) {
+						((Pawn) table[oldX][oldY]).resetFirstStep();;
+					}
 					correct = false;
 				}
 				else{
@@ -226,9 +243,9 @@ public class Game {
 		endTest();
 	}
 	
-	public void closeStream(){
-		sc.close();
-	}
+	//public void closeStream(){
+		//sc.close();
+	//}
 	
 	public void figurePos(){
 		for(int i = 0; i < 8; i++){
@@ -249,6 +266,10 @@ public class Game {
 		table[i][j] = table[k][l];
 		table[k][l] = tmp;
 		table[i][j].setXY(i, j);
+		if (table[i][j] instanceof Pawn) {
+			((Pawn) table[i][j]).resetFirstStep();;
+			
+		}
 	}
 	
 	private void whereCanStep(){
@@ -338,6 +359,26 @@ public class Game {
 				return;
 			}
 		}
+	}
+	public void setRC(Integer row, Integer col){
+		this.row = row;
+		this.col = col;
+	}
+
+	public boolean canYouGetData() {
+		return youCanGetData;
+	}
+
+	public void setYouCanGetData(boolean e) {
+		youCanGetData = e;
+	}
+	@Override
+	public void run() {
+		while(!this.isItEnd())
+			this.play();
+		System.out.println("The game has ended.");
+		System.out.println(this.getEndStr());
+		
 	}
 	
 }

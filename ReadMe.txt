@@ -1,0 +1,1 @@
+A ttf fájlt be kell másolni a bin-be es a project root-ba hogy jól mûködjön!
