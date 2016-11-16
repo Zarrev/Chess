@@ -34,7 +34,7 @@ public final class Pawn extends Figure {
 		
 		if(this.isColor())
 	    {
-			if(firstStep == 0 && row+2 == this.getX() && col == this.getY() && f[row+1][col] == null){
+			if(firstStep == 0 && row+2 == this.getX() && col == this.getY() && f[row][col] == null){
 				firstStep++;
 				return true;
 			}
@@ -48,7 +48,7 @@ public final class Pawn extends Figure {
 	    }
 	    else
 	    {
-	    	if(firstStep == 0 && row-2 == this.getX() && col == this.getY() && f[row-1][col] == null){
+	    	if(firstStep == 0 && row-2 == this.getX() && col == this.getY() && f[row][col] == null){
 				firstStep++;
 				return true;
 			}

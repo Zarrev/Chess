@@ -40,14 +40,14 @@ public class Game extends Thread{//implements Runnable {
 		this.WK = new King(true,"White_King");
 		this.BK = new King(false,"Black_King");
 		this.table = new Figure[][]{
-			{new Rook(false,"Black_Rook_1"), new Knight(false,"Black_Knight_1"), new Bishop(false,"Black_Bishop_1"), BK, new Queen(false,"Black_Queen"), new Bishop(false,"Black_Bishop_2"), new Knight(false,"Black_Knight_2"), new Rook(false,"Black_Rook_2")},
-			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), new Pawn(false,"Black_Pawn_6"), new Pawn(false,"Black_Pawn_7"), new Pawn(false,"Black_Pawn_8")}, 
+			{new Rook(false,"Black_Rook_1"), new Knight(false,"Black_Knight_1"), new Bishop(false,"Black_Bishop_1"), new Queen(false,"Black_Queen"), BK, new Bishop(false,"Black_Bishop_2"), new Knight(false,"Black_Knight_2"), new Rook(false,"Black_Rook_2")},
+			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), null/*new Pawn(false,"Black_Pawn_6")*/, null, new Pawn(false,"Black_Pawn_8")}, 
+			{null, null, null, null, null, null, null, null},
+			{null, null, null, null, null, new Pawn(true,"White_Pawn_5"), new Pawn(false,"Black_Pawn_7"), null},
 			{null, null, null, null, null, null, null, null},
 			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null, null},
-			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
-			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), WK, new Queen(true,"White_Queen"), new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
+			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), null, new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
+			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), new Queen(true,"White_Queen"),WK,  new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
 		};
 		this.whichPlayer = true;
 		this.choosen = null;
@@ -139,7 +139,7 @@ public class Game extends Thread{//implements Runnable {
 	}
 	
 	private void choose(){
-		
+		this.isItCheck();
 		System.out.println("Which figure is your choosen?");
 		boolean correct = false;
 		while(!correct){
@@ -153,7 +153,6 @@ public class Game extends Thread{//implements Runnable {
 			}
 		}
 		System.out.println("The choosen figure is " + this.choosen.getName());
-		
 	}
 
 	public void play(){//TODO WHERECANSTEP
@@ -167,7 +166,9 @@ public class Game extends Thread{//implements Runnable {
 		this.choose();
 		whereCanStep();
 		this.step();
+		endTest();
 		System.out.println(this);
+		
 		
 	}
 	
@@ -176,6 +177,9 @@ public class Game extends Thread{//implements Runnable {
 	}
 	
 	public boolean isItEnd(){
+		endTest();
+		toStringPS();
+		System.out.println(WK.getCheck() + ":" + BK.getCheck() + ":" + checkMate);
 		if (checkMate){
 			if(WK.getCheck()){
 				endStr = "The winner is the Black Player!";
@@ -197,7 +201,6 @@ public class Game extends Thread{//implements Runnable {
 	}
 	
 	private void step(){
-		this.isItCheck();
 		System.out.println("Where would you like to step?");
 		boolean correct = false;
 		
@@ -240,7 +243,6 @@ public class Game extends Thread{//implements Runnable {
 		choosen = null;
 		whichPlayer = !whichPlayer;
 		this.isItCheck();
-		endTest();
 	}
 
 	
@@ -316,12 +318,10 @@ public class Game extends Thread{//implements Runnable {
 						for(int l = 0; l < 8; l++){
 							if((table[k][l] == null || table[i][j].isColor() != table[k][l].isColor()) && table[i][j].step(k, l, table))
 							{	
-								
 								virtualStep(i, j, k, l);
 								if(!check){
 									possibleSteps.add(new PS(k,l,table[i][j].getName()));
 									table[i][j].add(k,l);
-									System.out.println(k+","+l+","+table[i][j].getName());
 								}
 							}
 						}
@@ -348,19 +348,16 @@ public class Game extends Thread{//implements Runnable {
 		}
 	}
 	
-	public void checkOnTheTable(){
+	public String checkOnTheTable(){
 		this.isItCheck();
 		if(WK.getCheck()){
-			System.out.println("White King is in check!");
+			return ("White King is in check!");
 		}
 	
 		if(BK.getCheck()){
-			System.out.println("Black King is in check!");
+			return ("Black King is in check!");
 		}
-		
-		if(!this.check){
-			System.out.println("Nobody is in check!");
-		}
+			return ("Nobody is in check!");
 	}
 	
 	public void toStringPS(){
@@ -374,6 +371,7 @@ public class Game extends Thread{//implements Runnable {
 	}
 
 	public void endTest(){
+		
 		whereCanStep();
 		if(possibleSteps.isEmpty()){
 			if(WK.getCheck()){
@@ -393,6 +391,8 @@ public class Game extends Thread{//implements Runnable {
 				checkStalemate = true;
 				return;
 			}
+			toStringPS();
+			System.out.println(WK.getCheck() + ":" + BK.getCheck()+":"+checkMate);
 		}
 	}
 	public void setRC(Integer row, Integer col){
@@ -407,22 +407,12 @@ public class Game extends Thread{//implements Runnable {
 	public void setYouCanGetData(boolean e) {
 		youCanGetData = e;
 	}
-	//@Override
-	/*public void run() {
-		while(!this.isItEnd())
-			this.play();
-		System.out.println("The game has ended.");
-		System.out.println(this.getEndStr());
-		
-	}
-	*/
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while(!this.isItEnd()){
 			this.play();
-			checkOnTheTable();
 		}
+		System.out.println(endStr);
 	}
 }

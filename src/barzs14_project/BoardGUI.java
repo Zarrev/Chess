@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 public class BoardGUI {
 	private int mouseClick = 0;
 	private GridPane board;
-	private BorderPane surface;
+	private BorderPane surface = new BorderPane();
 	private Scene sc;
 	private Stage stage;
 	public BoardGUI() {
@@ -34,13 +34,11 @@ public class BoardGUI {
 	}
 
 	private void draw() {
-		surface = new BorderPane();
 		board = new GridPane();
 		makeBorder();
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		refill();
@@ -53,8 +51,12 @@ public class BoardGUI {
 		if(mouseClick > 0 && Main.engine.getChossen()!=null){
 			for (Integer[] e : Main.engine.getChossen().getChossenPS()) {
 				for (Node node : board.getChildren()) {
-			        if(board.getRowIndex(node) == e[0]+1 && board.getColumnIndex(node) == e[1]+1) {
-			        	System.out.println(e[0] + ":" + e[1]);
+					if(GridPane.getRowIndex(node) == Main.engine.getChossen().getX()+1 && GridPane.getColumnIndex(node) == Main.engine.getChossen().getY()+1){
+						((Label) node).setTextFill(Color.BLUE);
+					}
+					
+			        if(GridPane.getRowIndex(node) == e[0]+1 && GridPane.getColumnIndex(node) == e[1]+1) {
+			        	((Label) node).setTextFill(Color.BLACK);
 			        	if(((Label) node).getText().equals("")){
 			        		((Label) node).setText("");
 			        	}
@@ -272,13 +274,12 @@ public class BoardGUI {
 				tmp.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						
+						mouseClick++;
 						Main.engine.setRC(x, y);
 						Main.engine.setYouCanGetData(true);
 						surface.getChildren().clear();
 						draw();
 						stage.getScene().setRoot(surface);
-						mouseClick++;
 					}
 					
 				});
