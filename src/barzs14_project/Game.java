@@ -1,15 +1,11 @@
 package barzs14_project;
 
-import java.util.Scanner;
 import java.util.Vector;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-
-public class Game extends Thread{//implements Runnable {
+public class Game extends Thread{
 
 	private Figure[][] table;
 	private boolean whichPlayer;
-	//private Scanner sc;
 	private Figure choosen;
 	private int row, col;
 	private boolean check;
@@ -122,18 +118,14 @@ public class Game extends Thread{//implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		//row = sc.nextInt();
 		System.out.println(row);
 		System.out.println("Give a col coord: ");
-		//col = sc.nextInt();
 		System.out.println(col);
 		while(row > 7 || row < 0){
 			System.out.println("Wrong row coord! Try Again!");
-			//row = sc.nextInt();
 		}
 		while(col > 7 || col < 0){
 			System.out.println("Wrong col coord! Try Again!");
-			//col = sc.nextInt();
 		}
 		youCanGetData = false;
 	}
@@ -245,7 +237,6 @@ public class Game extends Thread{//implements Runnable {
 		this.isItCheck();
 	}
 
-	
 	public void figurePos(){
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
@@ -378,23 +369,18 @@ public class Game extends Thread{//implements Runnable {
 				checkMate = true;
 				return;
 			}
-			else if (!WK.getCheck()){
-				checkStalemate = true;
-				return;
-			}
 			
 			if(BK.getCheck()){
 				checkMate = true;
 				return;
 			}
-			else if (!BK.getCheck()){
+			else if (!BK.getCheck() && !WK.getCheck()){
 				checkStalemate = true;
 				return;
 			}
-			toStringPS();
-			System.out.println(WK.getCheck() + ":" + BK.getCheck()+":"+checkMate);
 		}
 	}
+
 	public void setRC(Integer row, Integer col){
 		this.row = row;
 		this.col = col;
