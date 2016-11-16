@@ -1,6 +1,6 @@
 package barzs14_project;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class Game extends Thread{
 
@@ -10,7 +10,7 @@ public class Game extends Thread{
 	private int row, col;
 	private boolean check;
 	public boolean youCanGetData = false;
-	private class PS{
+	public class PS{
 		public int x;
 		public int y;
 		public String name;
@@ -24,25 +24,32 @@ public class Game extends Thread{
 		public String toString() {
 			return this.name + "\t:\t" + "(" + this.x + ", " + this.y + ")";
 		}
+		public String getName() {
+			return name;
+		}
 		
 	}
-	private Vector<PS> possibleSteps = new Vector<>();
+	private ArrayList<PS> possibleSteps = new ArrayList<>();
 	private boolean checkMate, checkStalemate;
 	private King WK;
 	private King BK;
 	private String endStr = new String("The game was interrupted.");
 	
+	public ArrayList<PS> getPossibleSteps() {
+		return possibleSteps;
+	}
+
 	private void makeTable(){
 		this.WK = new King(true,"White_King");
 		this.BK = new King(false,"Black_King");
 		this.table = new Figure[][]{
 			{new Rook(false,"Black_Rook_1"), new Knight(false,"Black_Knight_1"), new Bishop(false,"Black_Bishop_1"), new Queen(false,"Black_Queen"), BK, new Bishop(false,"Black_Bishop_2"), new Knight(false,"Black_Knight_2"), new Rook(false,"Black_Rook_2")},
-			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), null/*new Pawn(false,"Black_Pawn_6")*/, null, new Pawn(false,"Black_Pawn_8")}, 
-			{null, null, null, null, null, null, null, null},
-			{null, null, null, null, null, new Pawn(true,"White_Pawn_5"), new Pawn(false,"Black_Pawn_7"), null},
+			{new Pawn(false,"Black_Pawn_1"), new Pawn(false,"Black_Pawn_2"), new Pawn(false,"Black_Pawn_3"), new Pawn(false,"Black_Pawn_4"), new Pawn(false,"Black_Pawn_5"), new Pawn(false,"Black_Pawn_6"), new Pawn(false,"Black_Pawn_7"), new Pawn(false,"Black_Pawn_8")}, 
 			{null, null, null, null, null, null, null, null},
 			{null, null, null, null, null, null, null, null},
-			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), null, new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
+			{null, null, null, null, null, null, null, null},
+			{null, null, null, null, null, null, null, null},
+			{new Pawn(true,"White_Pawn_1"), new Pawn(true,"White_Pawn_2"), new Pawn(true,"White_Pawn_3"), new Pawn(true,"White_Pawn_4"), new Pawn(true,"White_Pawn_5"), new Pawn(true,"White_Pawn_6"), new Pawn(true,"White_Pawn_7"), new Pawn(true,"White_Pawn_8")},
 			{new Rook(true,"White_Rook_1"), new Knight(true,"White_Knight_1"), new Bishop(true,"White_Bishop_1"), new Queen(true,"White_Queen"),WK,  new Bishop(true,"White_Bishop_2"), new Knight(true,"White_Knight_2"), new Rook(true,"White_Rook_2")}
 		};
 		this.whichPlayer = true;
@@ -61,14 +68,14 @@ public class Game extends Thread{
 	}
 	
 	public Game() {
-		System.out.println("The game has begun!");
+		//System.out.println("The game has begun!");
 		this.makeTable();
 		//this.sc = new Scanner(System.in);
 
 	}
 	
 	public void reset(){
-		System.out.println("New Game has begun!");
+		//System.out.println("New Game has begun!");
 		this.makeTable();
 		check = false;
 	}
@@ -107,7 +114,7 @@ public class Game extends Thread{
 	}
 
 	private void readRowCol(){
-		System.out.println("Give a row coord: ");
+		//System.out.println("Give a row coord: ");
 		while(!youCanGetData){
 			if(youCanGetData){
 				break;
@@ -118,21 +125,21 @@ public class Game extends Thread{
 				e.printStackTrace();
 			}
 		}
-		System.out.println(row);
-		System.out.println("Give a col coord: ");
-		System.out.println(col);
-		while(row > 7 || row < 0){
-			System.out.println("Wrong row coord! Try Again!");
-		}
-		while(col > 7 || col < 0){
-			System.out.println("Wrong col coord! Try Again!");
-		}
+		//System.out.println(row);
+		//System.out.println("Give a col coord: ");
+		//System.out.println(col);
+		//while(row > 7 || row < 0){
+			//System.out.println("Wrong row coord! Try Again!");
+		//}
+		//while(col > 7 || col < 0){
+			//System.out.println("Wrong col coord! Try Again!");
+		//}
 		youCanGetData = false;
 	}
 	
 	private void choose(){
 		this.isItCheck();
-		System.out.println("Which figure is your choosen?");
+		//System.out.println("Which figure is your choosen?");
 		boolean correct = false;
 		while(!correct){
 			readRowCol();
@@ -140,26 +147,26 @@ public class Game extends Thread{
 				correct = true;
 				choosen = table[row][col];
 			}
-			else{
+			/*else{
 				System.out.println("Wrong choose! Try again!");
-			}
+			}*/
 		}
-		System.out.println("The choosen figure is " + this.choosen.getName());
+		//System.out.println("The choosen figure is " + this.choosen.getName());
 	}
 
-	public void play(){//TODO WHERECANSTEP
-		if (this.whichPlayer){
+	public void play(){//TODO Play func
+		/*if (this.whichPlayer){
 			System.out.println("White Player turn!");
 		}
 		else{
 			System.out.println("Black Player turn!");
 		}
-		System.out.println(this);
+		System.out.println(this);*/
 		this.choose();
 		whereCanStep();
 		this.step();
 		endTest();
-		System.out.println(this);
+		//System.out.println(this);
 		
 		
 	}
@@ -170,8 +177,6 @@ public class Game extends Thread{
 	
 	public boolean isItEnd(){
 		endTest();
-		toStringPS();
-		System.out.println(WK.getCheck() + ":" + BK.getCheck() + ":" + checkMate);
 		if (checkMate){
 			if(WK.getCheck()){
 				endStr = "The winner is the Black Player!";
@@ -193,7 +198,7 @@ public class Game extends Thread{
 	}
 	
 	private void step(){
-		System.out.println("Where would you like to step?");
+		//System.out.println("Where would you like to step?");
 		boolean correct = false;
 		
 		while(!correct){
@@ -210,14 +215,11 @@ public class Game extends Thread{
 				
 				this.isItCheck();
 				if(this.check){
-					System.out.println("Your King is in check! Wrong step! You can choose a figure again!");
+					//System.out.println("Your King is in check! Wrong step! You can choose a figure again!");
 					choosen = table[row][col];
 					table[oldX][oldY] = choosen;
 					table[oldX][oldY].setXY(oldX, oldY);
 					table[row][col] = null;
-					if (table[oldX][oldY] instanceof Pawn) {
-						((Pawn) table[oldX][oldY]).resetFirstStep();;
-					}
 					correct = false;
 				}
 				else{
@@ -226,10 +228,9 @@ public class Game extends Thread{
 				
 			}
 			else{
-				System.out.println("Wrong step! Try again!");
-			}
-			if(!correct){
-				this.choose();
+				if(table[row][col] != null && table[row][col].isColor() == whichPlayer)
+					this.choosen = table[row][col];
+				//System.out.println("Wrong step! Try again!");
 			}
 		}
 		choosen = null;
@@ -241,7 +242,7 @@ public class Game extends Thread{
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
 				if(table[i][j]!=null){
-					System.out.println(table[i][j].getName() + " : (" + table[i][j].getX() + " , " + table[i][j].getY() + ")");
+					//System.out.println(table[i][j].getName() + " : (" + table[i][j].getX() + " , " + table[i][j].getY() + ")");
 				}
 			}
 		}
@@ -256,10 +257,6 @@ public class Game extends Thread{
 		table[i][j] = table[k][l];
 		table[k][l] = tmp;
 		table[i][j].setXY(i, j);
-		if (table[i][j] instanceof Pawn) {
-			if((((Pawn) table[i][j]).getX() == 1 && !((Pawn) table[i][j]).isColor()) ||  (((Pawn) table[i][j]).getX() == 6 && ((Pawn) table[i][j]).isColor()))
-				((Pawn) table[i][j]).resetFirstStep();
-		}
 	}
 	
 	public Figure getChossen() {
@@ -393,12 +390,33 @@ public class Game extends Thread{
 	public void setYouCanGetData(boolean e) {
 		youCanGetData = e;
 	}
+	
+	public boolean isCheck() {
+		return check;
+	}
+
+	public boolean isCheckMate() {
+		return checkMate;
+	}
+
+	public boolean isCheckStalemate() {
+		return checkStalemate;
+	}
+	
+
+	public King getWK() {
+		return WK;
+	}
+
+	public King getBK() {
+		return BK;
+	}
 
 	@Override
 	public void run() {
 		while(!this.isItEnd()){
 			this.play();
 		}
-		System.out.println(endStr);
+		//System.out.println(endStr);
 	}
 }

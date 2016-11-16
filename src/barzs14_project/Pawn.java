@@ -2,14 +2,8 @@ package barzs14_project;
 
 public final class Pawn extends Figure {
 	
-	private int firstStep;
-	
 	public Pawn(boolean color, String name) {
 		super(color, name);
-		firstStep = 0;
-	}
-	public void resetFirstStep(){
-		firstStep = 0;
 	}
 	public boolean hit(int row, int col, Figure f){
 		if (f != null && this.isColor()){
@@ -34,8 +28,7 @@ public final class Pawn extends Figure {
 		
 		if(this.isColor())
 	    {
-			if(firstStep == 0 && row+2 == this.getX() && col == this.getY() && f[row][col] == null){
-				firstStep++;
+			if(this.getX() == 6 && row+2 == this.getX() && col == this.getY() && f[row][col] == null){
 				return true;
 			}
 			
@@ -48,8 +41,7 @@ public final class Pawn extends Figure {
 	    }
 	    else
 	    {
-	    	if(firstStep == 0 && row-2 == this.getX() && col == this.getY() && f[row][col] == null){
-				firstStep++;
+	    	if(this.getX() == 1 && row-2 == this.getX() && col == this.getY() && f[row][col] == null){
 				return true;
 			}
 	    	

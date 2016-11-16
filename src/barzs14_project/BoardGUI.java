@@ -1,5 +1,6 @@
 package barzs14_project;
 
+import barzs14_project.Game.PS;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,11 +9,11 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,7 +22,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+//TODO NEW GAMENEL ELTUNIK A MENU
 public class BoardGUI {
 	private int mouseClick = 0;
 	private GridPane board;
@@ -29,11 +30,31 @@ public class BoardGUI {
 	private Scene sc;
 	private Stage stage;
 	public BoardGUI() {
+		surface.setStyle("-fx-background-color: #ffffff");
+		makeMenu();
 		draw();
 		sc = new Scene(surface);
 	}
 
+	private void alert() {
+		String alertMes = new String(Main.engine.getEndStr());
+		if(Main.engine.getBK().getCheck() && !Main.engine.isCheckMate() && !Main.engine.isCheckStalemate()){
+			alertMes = "Black King is in chek!";
+		}
+		if(Main.engine.getWK().getCheck() && !Main.engine.isCheckMate() && !Main.engine.isCheckStalemate()){
+			alertMes = "White King is in chek!";
+		}
+		if(Main.engine.isItEnd() || ((Main.engine.getBK().getCheck() || Main.engine.getWK().getCheck()) && mouseClick > 0)){
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setHeaderText(alertMes);
+			alert.showAndWait();
+		}
+
+	}
+	
 	private void draw() {
+		
 		board = new GridPane();
 		makeBorder();
 		try {
@@ -44,10 +65,39 @@ public class BoardGUI {
 		refill();
 		showPS();
 		surface.setCenter(board);
-		makeMenu();
+		inCheckPS();
+		alert();
+	}
+	
+	private void inCheckPS() {
+		if(mouseClick > 0 && Main.engine.isCheck() && !Main.engine.isCheckMate() && !Main.engine.isCheckStalemate()){
+			if(Main.engine.getWK().getCheck()){
+				for (PS e : Main.engine.getPossibleSteps()) {
+					for (Node node : board.getChildren()) {
+						if(GridPane.getRowIndex(node) < 9 && GridPane.getColumnIndex(node) < 9 &&GridPane.getRowIndex(node) > 0 && GridPane.getColumnIndex(node) > 0) 
+							if(Main.engine.getTable()[GridPane.getRowIndex(node)-1][GridPane.getColumnIndex(node)-1] != null 
+							&& Main.engine.getTable()[GridPane.getRowIndex(node)-1][GridPane.getColumnIndex(node)-1].getName().equals(e.getName())){
+								((Label) node).setTextFill(Color.GREEN);
+							}
+					}
+				}
+			}
+			if(Main.engine.getBK().getCheck()){
+				for (PS e : Main.engine.getPossibleSteps()) {
+					for (Node node : board.getChildren()) {
+						if(GridPane.getRowIndex(node) < 9 && GridPane.getColumnIndex(node) < 9 &&GridPane.getRowIndex(node) > 0 && GridPane.getColumnIndex(node) > 0) 
+							if(Main.engine.getTable()[GridPane.getRowIndex(node)-1][GridPane.getColumnIndex(node)-1] != null 
+							&& Main.engine.getTable()[GridPane.getRowIndex(node)-1][GridPane.getColumnIndex(node)-1].getName().equals(e.getName())){
+								((Label) node).setTextFill(Color.GREEN);
+							}
+					}
+				}
+			}
+		}
 	}
 	
 	private void showPS(){
+
 		if(mouseClick > 0 && Main.engine.getChossen()!=null){
 			for (Integer[] e : Main.engine.getChossen().getChossenPS()) {
 				for (Node node : board.getChildren()) {
@@ -56,7 +106,6 @@ public class BoardGUI {
 					}
 					
 			        if(GridPane.getRowIndex(node) == e[0]+1 && GridPane.getColumnIndex(node) == e[1]+1) {
-			        	((Label) node).setTextFill(Color.BLACK);
 			        	if(((Label) node).getText().equals("")){
 			        		((Label) node).setText("");
 			        	}
@@ -86,7 +135,8 @@ public class BoardGUI {
 			@Override
 			public void handle(ActionEvent event) {
 				Main.engine.reset();
-				surface.getChildren().clear();
+				mouseClick = 0;
+				surface.getChildren().remove(surface.getCenter());
 				draw();
 				stage.getScene().setRoot(surface);
 			}
@@ -98,7 +148,7 @@ public class BoardGUI {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Information about MineSweeper");
 				alert.setHeaderText(null);
-				alert.setContentText("I have a big secret!\n *Whisper* It is a Chess Game...*Whisper*\nI hope I helped to you!");
+				alert.setContentText("Red zone is moveable zone.\nLeft click is figure choose and step.\nIf you in check, the green figures are moveable.");
 				alert.showAndWait();
 			}
 		});
@@ -277,12 +327,14 @@ public class BoardGUI {
 						mouseClick++;
 						Main.engine.setRC(x, y);
 						Main.engine.setYouCanGetData(true);
-						surface.getChildren().clear();
+						surface.getChildren().remove(surface.getCenter());
 						draw();
 						stage.getScene().setRoot(surface);
+						
 					}
 					
 				});
+				tmp.setTextFill(Color.BLACK);
 				board.add(tmp, j + 1, i + 1);
 			}
 		}
