@@ -96,7 +96,6 @@ public class Main extends Application{
 		ButtonType buttonTypeCancel = new ButtonType("EXIT", ButtonData.CANCEL_CLOSE);
 
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
-
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeOne){
 			engine.setDaemon(true);

@@ -44,13 +44,12 @@ public class BoardGUI {
 		if(Main.engine.getWK().getCheck() && !Main.engine.isCheckMate() && !Main.engine.isCheckStalemate()){
 			alertMes = "White King is in chek!";
 		}
-		if(Main.engine.isItEnd() || ((Main.engine.getBK().getCheck() || Main.engine.getWK().getCheck()) && mouseClick > 0)){
+		if(!alertMes.equals("The game was interrupted.") && (Main.engine.isItEnd() || ((Main.engine.getBK().getCheck() || Main.engine.getWK().getCheck()) && mouseClick > 0))){
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
 			alert.setHeaderText(alertMes);
 			alert.showAndWait();
 		}
-
 	}
 	
 	private void draw() {
@@ -181,24 +180,105 @@ public class BoardGUI {
 			r.setText("");
 			board.add(r, i, 0);
 		}
-		for (int i = 1; i < 9; i++) {
+		/*for (int i = 1; i < 9; i++) {
 			Text r = new Text();
 			r.setFont(Main.f);
 			r.setText("");
 			board.add(r, i, 9);
-		}
+		}*/
+		Text x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 1, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 2, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 3, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 4, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 5, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 6, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 7, 9);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 8, 9);
+		
 		for (int i = 1; i < 9; i++) {
 			Text r = new Text();
 			r.setFont(Main.f);
 			r.setText("");
 			board.add(r, 9, i);
 		}
-		for (int i = 1; i < 9; i++) {
+		/*for (int i = 1; i < 9; i++) {
 			Text r = new Text();
 			r.setFont(Main.f);
 			r.setText("");
 			board.add(r, 0, i);
-		}
+		}*/
+		///
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 1);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 2);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 3);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 4);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 5);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 6);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 7);
+		
+		x = new Text();
+		x.setFont(Main.f);
+		x.setText("");
+		board.add(x, 0, 8);
+		///
 		Text r = new Text();
 		r.setFont(Main.f);
 		r.setText("");
