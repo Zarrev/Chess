@@ -21,6 +21,7 @@ public class Main extends Application{
 
 	public static int maxSize = 60;
 	public static Font f = new Font(maxSize);
+	
 	/*
 	private void ConsolTest(){
 		Scanner sc = new Scanner(System.in);
@@ -74,6 +75,7 @@ public class Main extends Application{
 		}
 	}
 	*/
+	
 	public static void main(String[] args) {
 		 try {
 			f = Font.loadFont(new FileInputStream(new File("KINGFONT.TTF")), maxSize);

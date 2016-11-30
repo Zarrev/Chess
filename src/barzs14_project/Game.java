@@ -1,5 +1,6 @@
 package barzs14_project;
 
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Game extends Thread{
@@ -35,6 +36,8 @@ public class Game extends Thread{
 	private King BK;
 	private String endStr = new String("The game was interrupted.");
 	
+	//private Socket socket;
+	
 	public ArrayList<PS> getPossibleSteps() {
 		return possibleSteps;
 	}
@@ -65,10 +68,12 @@ public class Game extends Thread{
 		check = false;
 		checkMate = false;
 		checkStalemate = false;
+		youCanGetData = false;
 	}
 	
-	public Game() {
+	public Game(/*Socket socket*/) {
 		//System.out.println("The game has begun!");
+		//this.socket = socket;
 		this.makeTable();
 		//this.sc = new Scanner(System.in);
 
@@ -77,7 +82,9 @@ public class Game extends Thread{
 	public void reset(){
 		//System.out.println("New Game has begun!");
 		this.makeTable();
-		check = false;
+		synchronized (this) {
+			this.notifyAll();
+		}
 	}
 
 	@Override
@@ -414,8 +421,18 @@ public class Game extends Thread{
 
 	@Override
 	public void run() {
-		while(!this.isItEnd()){
+		while(true){
 			this.play();
+			if(this.isItEnd()){
+				try {
+					synchronized (this) {
+						this.wait();
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		//System.out.println(endStr);
 	}
